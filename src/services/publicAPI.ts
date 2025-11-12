@@ -1,4 +1,6 @@
-export const BASE_URL = "https://pns0tn0c-8000.euw.devtunnels.ms";
+import axios from "axios";
+
+export const BASE_URL = "https://thjj2rgx-8000.euw.devtunnels.ms";
 
 export type UserLink = {
     id: string,
@@ -22,9 +24,8 @@ export type UserLinkResponse = {
 export async function getUserLinks(username: string)
 {
     try {
-        const res = await fetch(BASE_URL + `/api/links/public/${username}/`);
-        const data: UserLinkResponse = await res.json()
-        return data;
+        const res = await axios(BASE_URL + `/api/links/public/${username}/`);
+        return res.data;
     } catch (error) {
 // TODO
     }
@@ -36,6 +37,7 @@ type Tokens = {
 };
 
 export async function loginUser(username:string, password: string) {
+    console.log("Started login");
     const res = await fetch(BASE_URL + "/api/accounts/token/",
         {
             method: "POST",
@@ -50,5 +52,7 @@ export async function loginUser(username:string, password: string) {
         return
     }
     const data: Tokens = await res.json()
-    console.log(data);
+    localStorage.setItem("access_token", data.acces);
+    localStorage.setItem("refresh_token", data.refresh);
+
 }
